@@ -347,3 +347,119 @@ footer {
 .copy-icon {
     font-size: 0.9rem;
 }
+
+/* Змінні для світлої теми */
+body.light-theme {
+    --bg-main: #f8fafc;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .hero h1 {
+    background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .glass-nav {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .info-card,
+body.light-theme .level-card,
+body.light-theme .rule-box {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+body.light-theme .copy-btn {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+}
+
+/* Фіксована кнопка перемикача у правому верхньому кутку */
+.theme-toggle-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Плавний перехід кольорів для елементів */
+body {
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Анімація радіальної хвилі через View Transitions API */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.5s;
+    mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 9999;
+}
+
+.light-theme::view-transition-old(root) {
+    z-index: 9999;
+}
+
+.light-theme::view-transition-new(root) {
+    z-index: 1;
+}
+
+/* Налаштування View Transitions для плавного радіального кола */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 9999;
+}
+
+/* Забезпечуємо плавний колірний перехід елементів */
+body {
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Приховуємо посмикування під час переходу теми */
+::view-transition-container(root) {
+    animation-duration: 0s;
+}
+
+/* Вимикаємо анімацію hover-ефектів для карток у момент перемикання */
+html::view-transition-old(root),
+html::view-transition-new(root) {
+    backface-visibility: hidden;
+    transform: none !important;
+}
