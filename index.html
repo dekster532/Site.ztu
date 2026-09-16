@@ -10,6 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Кнопка перемикання теми у правому верхньому кутку -->
+<button id="theme-toggle" class="theme-toggle-btn" title="Змінити тему">
+    <span id="theme-icon">🌙</span>
+</button>
 
     <div class="bg-glow bg-glow-1"></div>
     <div class="bg-glow bg-glow-2"></div>
@@ -192,72 +196,128 @@
     </footer>
 
     <!-- JavaScript для інтерактивності -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Анімація для навігаційних кнопок
-            const navButtons = document.querySelectorAll('.nav-btn');
-            navButtons.forEach(btn => {
-                btn.addEventListener('mouseenter', () => {
-                    btn.style.transform = 'scale(1.08)';
-                    btn.style.transition = 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                });
-                btn.addEventListener('mouseleave', () => {
-                    btn.style.transform = 'scale(1)';
-                });
-            });
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
 
-            // Анімація карток
-            const hoverCards = document.querySelectorAll('.js-hover-card');
-            hoverCards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.style.transform = 'translateY(-4px) scale(1.01)';
-                    card.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'translateY(0) scale(1)';
-                });
-            });
+        if (themeBtn && themeIcon) {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                themeIcon.innerText = '☀️';
+            }
 
-            // Логіка копіювання вмісту рівня
-            const copyButtons = document.querySelectorAll('.copy-btn');
-            copyButtons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // запобігає конфліктам подій
-                    
-                    const card = btn.closest('.level-card');
-                    const levelName = card.querySelector('h3').innerText;
-                    const levelBadge = card.querySelector('.level-badge').innerText;
-                    
-                    const items = card.querySelectorAll('.score-item');
-                    let textToCopy = `${levelBadge}: ${levelName}\n`;
-                    
-                    items.forEach(item => {
-                        const score = item.querySelector('.badge').innerText;
-                        const text = item.querySelector('p').innerText;
-                        textToCopy += `${score} бал(ів) — ${text}\n`;
+            const applyThemeToggle = () => {
+                document.body.classList.toggle('light-theme');
+                const isLight = document.body.classList.contains('light-theme');
+                themeIcon.innerText = isLight ? '☀️' : '🌙';
+                localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            };
+
+            themeBtn.addEventListener('click', (e) => {
+                // Прибираємо фокус з кнопки, щоб уникнути миготіння карток і кнопок
+                themeBtn.blur();
+
+                const rect = themeBtn.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+
+                // Розраховуємо радіус, щоб коло повністю накрило екран
+                const endRadius = Math.hypot(
+                    Math.max(x, window.innerWidth - x),
+                    Math.max(y, window.innerHeight - y)
+                );
+
+                if (document.startViewTransition) {
+                    const transition = document.startViewTransition(() => {
+                        applyThemeToggle();
                     });
 
-                    // Запис у буфер обміну
-                    navigator.clipboard.writeText(textToCopy.trim()).then(() => {
-                        const iconSpan = btn.querySelector('.copy-icon');
-                        const textSpan = btn.querySelector('.copy-text');
-                        
-                        // Зміна стану кнопки
-                        iconSpan.innerText = '✅';
-                        textSpan.innerText = 'Скопійовано!';
-                        btn.classList.add('copied');
-
-                        // Повернення початкового стану через 2 секунди
-                        setTimeout(() => {
-                            iconSpan.innerText = '📋';
-                            textSpan.innerText = 'Копіювати';
-                            btn.classList.remove('copied');
-                        }, 2000);
+                    transition.ready.then(() => {
+                        document.documentElement.animate(
+                            {
+                                clipPath: [
+                                    `circle(0px at ${x}px ${y}px)`,
+                                    `circle(${endRadius}px at ${x}px ${y}px)`
+                                ]
+                            },
+                            {
+                                duration: 1500, // Тривалість анімації (1.5 секунди)
+                                easing: 'cubic-bezier(0.4, 0, 0.2, 1)', // М'який та плавний рух
+                                pseudoElement: '::view-transition-new(root)'
+                            }
+                        );
                     });
+                } else {
+                    applyThemeToggle();
+                }
+            });
+        }
+
+        // Логіка копіювання вмісту рівнів
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                btn.blur();
+                
+                const card = btn.closest('.level-card');
+                if (!card) return;
+
+                const levelName = card.querySelector('h3')?.innerText || '';
+                const levelBadge = card.querySelector('.level-badge')?.innerText || '';
+                const items = card.querySelectorAll('.score-item');
+                
+                let textToCopy = `${levelBadge}: ${levelName}\n`;
+                items.forEach(item => {
+                    const score = item.querySelector('.badge')?.innerText || '';
+                    const text = item.querySelector('p')?.innerText || '';
+                    textToCopy += `${score} бал(ів) — ${text}\n`;
+                });
+
+                navigator.clipboard.writeText(textToCopy.trim()).then(() => {
+                    const iconSpan = btn.querySelector('.copy-icon');
+                    const textSpan = btn.querySelector('.copy-text');
+                    
+                    if (iconSpan) iconSpan.innerText = '✅';
+                    if (textSpan) textSpan.innerText = 'Скопійовано!';
+                    btn.classList.add('copied');
+
+                    setTimeout(() => {
+                        if (iconSpan) iconSpan.innerText = '📋';
+                        if (textSpan) textSpan.innerText = 'Копіювати';
+                        btn.classList.remove('copied');
+                    }, 2000);
                 });
             });
         });
-    </script>
+
+        // Анімація для навігаційних кнопок
+        const navButtons = document.querySelectorAll('.nav-btn');
+        navButtons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.transform = 'scale(1.12)';
+                btn.style.transition = 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+
+        // Анімація для блоків карток
+        const hoverCards = document.querySelectorAll('.js-hover-card');
+        hoverCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-5px) scale(1.02)';
+                card.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
