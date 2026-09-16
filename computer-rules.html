@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила користування ПК — Безпека та Ергономіка</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <header class="hero">
+        <span class="tag">Техніка безпеки</span>
+        <h1>Користування комп'ютером</h1>
+        <p>Правила безпечної експлуатації ПК та ергономіка робочого місця</p>
+    </header>
+
+    <nav class="glass-nav">
+        <ul>
+            <li><a href="index.html" class="nav-btn">Оцінювання</a></li>
+            <li><a href="computer-rules.html" class="active nav-btn">Користування ПК</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+
+        <!-- Заборонені дії -->
+        <section id="safety-forbidden" class="glass-card warning-card">
+            <h2 class="section-title">Категорично заборонено 🚫</h2>
+            <p class="section-subtitle">Апаратура ПК працює під напругою <strong>220 В</strong>, що є небезпечним для життя!</p>
+            
+            <div class="rules-grid">
+                <div class="rule-box forbidden js-hover-card">
+                    <span class="rule-num">01</span>
+                    <p>Користуватися нестандартними або несправними розетками без заземлення.</p>
+                </div>
+                <div class="rule-box forbidden js-hover-card">
+                    <span class="rule-num">02</span>
+                    <p>Торкатися кабелів живлення, заземлення та тильного боку монітора під час роботи.</p>
+                </div>
+                <div class="rule-box forbidden js-hover-card">
+                    <span class="rule-num">03</span>
+                    <p>Відкривати корпуси системних блоків та периферії без відключення живлення.</p>
+                </div>
+                <div class="rule-box forbidden js-hover-card">
+                    <span class="rule-num">04</span>
+                    <p>Самостійно підключати, вимикати блоки апаратури або усувати несправності.</p>
+                </div>
+                <div class="rule-box forbidden js-hover-card">
+                    <span class="rule-num">05</span>
+                    <p>Класти на обладнання сторонні предмети або працювати у вологій одежі / вологими руками.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Обов'язкові вимоги та рекомендації -->
+        <section id="safety-rules" class="glass-card">
+            <h2 class="section-title">Вимоги до організації роботи ✅</h2>
+            <p class="section-subtitle">Правила та норми для збереження здоров'я під час тривалої роботи за ПК.</p>
+            
+            <div class="rules-grid">
+                <div class="rule-box allow js-hover-card">
+                    <h3>🩺 Медичні вимоги</h3>
+                    <p>За наявності захворювань очей, нервової чи серцево-судинної систем одержати дозвіл лікаря.</p>
+                </div>
+                <div class="rule-box allow js-hover-card">
+                    <h3>🚨 Аварійні ситуації</h3>
+                    <p>При появі запаху горілого або незвичних шумів — негайно вимкнути ПК і повідомити вчителя.</p>
+                </div>
+                <div class="rule-box allow js-hover-card">
+                    <h3>🖥️ Ергономіка монітора</h3>
+                    <p>Верхній край монітора на рівні очей (або трохи нижче), відстань до екрана — 60–70 см.</p>
+                </div>
+                <div class="rule-box allow js-hover-card">
+                    <h3>🪑 Постава та руки</h3>
+                    <p>Кут у ліктях та стегнах — 90°. Спина пряма, ступні повністю торкаються підлоги або підставки.</p>
+                </div>
+                <div class="rule-box allow js-hover-card">
+                    <h3>⏱️ Норми безперервної роботи</h3>
+                    <p>Учні: не більше 1.5 год/день. Вчителі: не більше 4 год/день. Перерва з вправами кожні 45 хвилин.</p>
+                </div>
+                <div class="rule-box allow js-hover-card">
+                    <h3>💡 Робоче середовище</h3>
+                    <p>Домагатися достатнього освітлення робочого місця, низького рівня шуму та доброї провітрюваності.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 CS Education. Правила техніки безпеки та ергономіка.</p>
+    </footer>
+
+    <!-- JavaScript для інтерактивності -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Анімація для навігаційних кнопок
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.addEventListener('mouseenter', () => {
+                    btn.style.transform = 'scale(1.12)';
+                    btn.style.transition = 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                });
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = 'scale(1)';
+                });
+            });
+
+            // Анімація для блоків правил
+            const hoverCards = document.querySelectorAll('.js-hover-card');
+            hoverCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-5px) scale(1.02)';
+                    card.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
